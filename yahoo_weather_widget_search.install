@@ -8,8 +8,8 @@
 /**
  * Implements hook_schema().
  */
-function ywws_schema() {
-  $schema['ywws_woeid'] = array(
+function yahoo_weather_widget_search_schema() {
+  $schema['yahoo_weather_widget_search_woeid'] = array(
     'description' => 'The base table for stored the places by user.',
     'fields' => array(
       'yid' => array(
@@ -54,8 +54,8 @@ function ywws_schema() {
 /**
  * Implements hook_uninstall().
  */
-function ywws_uninstall() {
+function yahoo_weather_widget_search_uninstall() {
   db_delete('variable')
-    ->condition('name', db_like('ywws_') . '%', 'LIKE')
+    ->condition('name', db_like('yahoo_weather_widget_search_') . '%', 'LIKE')
     ->execute();
 }

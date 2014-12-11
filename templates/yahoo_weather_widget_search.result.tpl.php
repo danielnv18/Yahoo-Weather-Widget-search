@@ -44,7 +44,7 @@
           <?php echo $current['temp']; ?>&deg;
         </span>
         <span class="celsius tempscale" style="display: none">
-          <?php echo fahrenheit_to_celsius($current['temp']); ?>&deg;
+          <?php echo yahoo_weather_widget_search_fahrenheit_to_celsius($current['temp']); ?>&deg;
         </span>
 
       </span>
@@ -53,7 +53,7 @@
         <span class="tempscale-button celsius">C</span>
       </div>
 
-      <?php echo ywws_weather_icon($current['code']); ?>
+      <?php echo yahoo_weather_widget_search_weather_icon($current['code']); ?>
 
       <span class="condition"><?php echo $current['text']; ?></span>
     </div>
