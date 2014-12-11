@@ -1,0 +1,5 @@
+name = Yahoo Weather Widget Search
+description = You can consult the weather from your site
+package = Media
+version = 1.0
+core = 7.x
