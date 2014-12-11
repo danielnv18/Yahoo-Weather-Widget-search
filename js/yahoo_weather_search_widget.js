@@ -1,5 +1,13 @@
+/**
+ * @file
+ * Scripts
+ */
+
 (function($){
 
+  /**
+   * Toggle the temperatures scales
+   */
   Drupal.behaviors.yahooWeatherTempscale = {
     attach: function (context, settings) {
       $('.tempscale-button', context).once('yahooWeather', function () {

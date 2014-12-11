@@ -7,21 +7,21 @@
 /**
  * Implements hook_menu().
  */
-function yahoo_weather_widget_search_menu() {
+function yahoo_weather_search_widget_menu() {
   $items = array();
 
   // Admin page to be able to change the Consumer Key.
-  $items['admin/config/media/yahoo_weather_widget_search'] = array(
+  $items['admin/config/media/yahoo-weather-widget'] = array(
     'title' => 'Yahoo Weather Widget Settings',
     'description' => 'Yahoo Weather App Settings',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('yahoo_weather_widget_search_admin_form'),
+    'page arguments' => array('yahoo_weather_search_widget_admin_form'),
     'access arguments' => array('Administer Yahoo App ID'),
   );
 
   // Ajax path to re-render the original form.
-  $items['yahoo_weather_widget_search_link_callback'] = array(
-    'page callback' => 'yahoo_weather_widget_search_link_response',
+  $items['yahoo-weather-search-widget-link-callback'] = array(
+    'page callback' => 'yahoo_weather_search_widget_link_response',
     'access callback' => 'user_access',
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
@@ -33,7 +33,7 @@ function yahoo_weather_widget_search_menu() {
 /**
  * Implements hook_permission().
  */
-function yahoo_weather_widget_search_permission() {
+function yahoo_weather_search_widget_permission() {
   $perms = array();
 
   $perms['Administer Yahoo App ID'] = array(
@@ -47,10 +47,10 @@ function yahoo_weather_widget_search_permission() {
 /**
  * Implements hook_theme().
  */
-function yahoo_weather_widget_search_theme($existing, $type, $theme, $path) {
+function yahoo_weather_search_widget_theme($existing, $type, $theme, $path) {
   return array(
-    'yahoo_weather_widget_search_template' => array(
-      'template' => 'yahoo_weather_widget_search.result',
+    'yahoo_weather_search_widget_template' => array(
+      'template' => 'yahoo_weather_search_widget.result',
       'path' => $path . '/templates',
       'type' => 'theme',
       'variables' => array(
@@ -65,7 +65,7 @@ function yahoo_weather_widget_search_theme($existing, $type, $theme, $path) {
 /**
  * Implements hook_block_info().
  */
-function yahoo_weather_widget_search_block_info() {
+function yahoo_weather_search_widget_block_info() {
   $blocks = array();
 
   $blocks['yahoo_weather'] = array(
@@ -78,14 +78,14 @@ function yahoo_weather_widget_search_block_info() {
 /**
  * Implements hook_user_logout().
  */
-function yahoo_weather_widget_search_user_logout($account) {
-  yahoo_weather_widget_search_delete_user_place($account->uid);
+function yahoo_weather_search_widget_user_logout($account) {
+  yahoo_weather_search_widget_delete_user_place($account->uid);
 }
 
 /**
  * Implements hook_block_view().
  */
-function yahoo_weather_widget_search_block_view($delta = '') {
+function yahoo_weather_search_widget_block_view($delta = '') {
   $block = array();
 
   switch ($delta) {
@@ -93,16 +93,16 @@ function yahoo_weather_widget_search_block_view($delta = '') {
     case 'yahoo_weather':
       $block['subject'] = t('Weather');
       // This is to toggle the place temp.
-      drupal_add_js(drupal_get_path('module', 'yahoo_weather_widget_search') . '/js/yahoo_weather_widget_search.js', 'file');
-      drupal_add_css(drupal_get_path('module', 'yahoo_weather_widget_search') . '/css/weather-icons.min.css', 'file');
+      drupal_add_js(drupal_get_path('module', 'yahoo_weather_search_widget') . '/js/yahoo_weather_search_widget.js', 'file');
+      drupal_add_css(drupal_get_path('module', 'yahoo_weather_search_widget') . '/css/weather-icons.min.css', 'file');
 
       // Render the form to to consult the weather of one place.
-      $woeid = yahoo_weather_widget_search_get_user_place();
+      $woeid = yahoo_weather_search_widget_get_user_place();
       if ($woeid > 0) {
-        $content = yahoo_weather_widget_search_render($woeid);
+        $content = yahoo_weather_search_widget_render($woeid);
       }
       else {
-        $form = drupal_get_form('yahoo_weather_widget_search_block_form');
+        $form = drupal_get_form('yahoo_weather_search_widget_block_form');
         $content = drupal_render($form);
       }
 
@@ -121,11 +121,11 @@ function yahoo_weather_widget_search_block_view($delta = '') {
  *
  * @see https://developer.yahoo.com/geo/geoplanet/
  */
-function yahoo_weather_widget_search_admin_form() {
-  $form['yahoo_weather_widget_search_consumer_key'] = array(
+function yahoo_weather_search_widget_admin_form() {
+  $form['yahoo_weather_search_widget_consumer_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Consumer Key'),
-    '#default_value' => variable_get('yahoo_weather_widget_search_consumer_key'),
+    '#default_value' => variable_get('yahoo_weather_search_widget_consumer_key'),
     '#description' => t('You can generate your own consumer key at !link.',
       array(
         '!link' => l(t('here'), 'https://developer.yahoo.com/wsregapp/'),
@@ -139,7 +139,7 @@ function yahoo_weather_widget_search_admin_form() {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function yahoo_weather_widget_search_preprocess_block(&$variables) {
+function yahoo_weather_search_widget_preprocess_block(&$variables) {
   if ($variables['block']->module == 'yahoo_weather') {
     $variables['attributes_array']['class'][] = 'yahoo-weather';
   }
@@ -150,11 +150,11 @@ function yahoo_weather_widget_search_preprocess_block(&$variables) {
  *
  * Weather search input.
  */
-function yahoo_weather_widget_search_block_form() {
+function yahoo_weather_search_widget_block_form() {
   $form = array();
 
   // Wrap the form to replace with the ajax callback.
-  $form['yahoo_weather_widget_search_prefix'] = array(
+  $form['yahoo_weather_search_widget_prefix'] = array(
     '#markup' => '<div id="yahoo-weather-form">',
   );
   $form['place'] = array(
@@ -174,13 +174,13 @@ function yahoo_weather_widget_search_block_form() {
     '#prefix' => '<div class="weather-buttons">',
     '#suffix' => '</div>',
     '#ajax' => array(
-      'callback' => 'yahoo_weather_widget_search_ajax_submit',
+      'callback' => 'yahoo_weather_search_widget_ajax_submit',
       'wrapper' => 'yahoo-weather-form',
       'method' => 'replace',
       'effect' => 'fade',
     ),
   );
-  $form['yahoo_weather_widget_search_suffix'] = array(
+  $form['yahoo_weather_search_widget_suffix'] = array(
     '#markup' => '</div>',
   );
 
@@ -192,15 +192,15 @@ function yahoo_weather_widget_search_block_form() {
  *
  * Link that return to the weather search input.
  */
-function yahoo_weather_widget_search_link() {
+function yahoo_weather_search_widget_link() {
   $build['ajax_link'] = array(
     '#type' => 'link',
     '#title' => t('Return'),
     // Note the /nojs portion of the href - if javascript is enabled,
     // this part will be stripped from the path before it is called.
-    '#href' => 'yahoo_weather_widget_search_link_callback/nojs/',
+    '#href' => 'yahoo-weather-search-widget-link-callback/nojs/',
     '#ajax' => array(
-      'wrapper' => 'yahoo_weather_widget_search',
+      'wrapper' => 'yahoo_weather_search_widget',
       'method' => 'html',
     ),
   );
@@ -217,8 +217,8 @@ function yahoo_weather_widget_search_link() {
  *   If $type == 'ajax', returns an array of AJAX Commands.
  *   Otherwise, just returns the content, which will end up being a page.
  */
-function yahoo_weather_widget_search_link_response($type = 'ajax') {
-  $form = drupal_get_form('yahoo_weather_widget_search_block_form');
+function yahoo_weather_search_widget_link_response($type = 'ajax') {
+  $form = drupal_get_form('yahoo_weather_search_widget_block_form');
 
   if ($type == 'ajax') {
     // Get the original Weather Form.
@@ -238,17 +238,17 @@ function yahoo_weather_widget_search_link_response($type = 'ajax') {
 /**
  * The function that respond to the weather block request.
  *
- * @see yahoo_weather_widget_search_block_form()
+ * @see yahoo_weather_search_widget_block_form()
  *
  * @param array $form
- *   drupal form array
+ *   Drupal form array.
  * @param array $form_state
- *   drupal form_state array
+ *   Drupal form_state array.
  *
  * @return string
- *   The html that is going to replace
+ *   The html that is going to replace.
  */
-function yahoo_weather_widget_search_ajax_submit($form, $form_state) {
+function yahoo_weather_search_widget_ajax_submit(&$form, $form_state) {
 
   // First check if the user type something on the input.
   if (!empty($form_state['values']['place'])) {
@@ -256,7 +256,7 @@ function yahoo_weather_widget_search_ajax_submit($form, $form_state) {
 
     // Based on the place get the weather info of that place using Yahoo
     // Weather.
-    $weather = yahoo_weather_widget_search_get_weather($place);
+    $weather = yahoo_weather_search_widget_get_weather($place);
 
     // Validate if yahoo could find the weather's place.
     if (is_null($weather)) {
@@ -265,11 +265,11 @@ function yahoo_weather_widget_search_ajax_submit($form, $form_state) {
       )), 'error');
       return $form;
     }
-    $link_form = drupal_get_form('yahoo_weather_widget_search_link');
+    $link_form = drupal_get_form('yahoo_weather_search_widget_link');
 
     $link = drupal_render($link_form);
     // Return the html that's is going to show on the block.
-    $html = theme('yahoo_weather_widget_search_template',
+    $html = theme('yahoo_weather_search_widget_template',
       array(
         'link' => $link,
         'location' => $weather->channel->xpath('yweather:location'),
@@ -296,18 +296,18 @@ function yahoo_weather_widget_search_ajax_submit($form, $form_state) {
  * @return SimpleXMLElement
  *   The Yahoo Weather services respond
  */
-function yahoo_weather_widget_search_get_weather($place = '', $woeid = 0) {
+function yahoo_weather_search_widget_get_weather($place = '', $woeid = 0) {
 
   // To get the weather of one place Yahoo needs the WOEID.
   if ($woeid == 0) {
-    $woeid = yahoo_weather_widget_search_place_woeid($place);
+    $woeid = yahoo_weather_search_widget_place_woeid($place);
   }
 
   if (is_null($woeid)) {
     return NULL;
   }
   // Gets the XML file content.
-  $result = yahoo_weather_widget_search_get_contents_curl('http://weather.yahooapis.com/forecastrss?w=' . $woeid . '&u=f');
+  $result = yahoo_weather_search_widget_get_contents_curl('http://weather.yahooapis.com/forecastrss?w=' . $woeid . '&u=f');
 
   // Parse the xml with SimpleXMLElement class.
   $xml = simplexml_load_string($result);
@@ -329,10 +329,10 @@ function yahoo_weather_widget_search_get_weather($place = '', $woeid = 0) {
  * @return int
  *   The WOEID or null in case the request fail
  */
-function yahoo_weather_widget_search_place_woeid($place) {
+function yahoo_weather_search_widget_place_woeid($place) {
 
   // Gets the info of one place.
-  $info = yahoo_weather_widget_search_place_info($place);
+  $info = yahoo_weather_search_widget_place_info($place);
 
   // Return null if it gets an error.
   if (isset($info->error)) {
@@ -350,7 +350,7 @@ function yahoo_weather_widget_search_place_woeid($place) {
 
     // Check if the user is loggin to store the woeid.
     if (user_is_logged_in()) {
-      yahoo_weather_widget_search_set_user_place($woeid, $place);
+      yahoo_weather_search_widget_set_user_place($woeid, $place);
     }
   }
 
@@ -365,18 +365,18 @@ function yahoo_weather_widget_search_place_woeid($place) {
  * @see https://developer.yahoo.com/geo/geoplanet/guide/api_docs.html#api_overview
  *
  * @param string $place
- *   The place name to request
+ *   The place name to request.
  *
  * @return object
- *   json respond decoded as a object
+ *   json respond decoded as a object.
  */
-function yahoo_weather_widget_search_place_info($place) {
+function yahoo_weather_search_widget_place_info($place) {
 
   // Replace the empty space because the request return error.
   $place = str_replace(' ', '%20', $place);
 
   // Get the consumer key.
-  $key = variable_get('yahoo_weather_widget_search_consumer_key', '');
+  $key = variable_get('yahoo_weather_search_widget_consumer_key', '');
 
   if ($key == '') {
     drupal_set_message(t('Please set first the consumer key'), 'error');
@@ -386,7 +386,7 @@ function yahoo_weather_widget_search_place_info($place) {
   $url = "http://where.yahooapis.com/v1/places.q('" . $place . "')?format=json&appid=" . $key;
 
   // Get the json content.
-  $content = yahoo_weather_widget_search_get_contents_curl(yahoo_weather_widget_search_sanitize_string($url));
+  $content = yahoo_weather_search_widget_get_contents_curl(yahoo_weather_search_widget_sanitize_string($url));
 
   // Decode the json into stdClass object.
   return json_decode($content);
@@ -396,12 +396,12 @@ function yahoo_weather_widget_search_place_info($place) {
  * Convert Celsius(C) to Fahrenheit(F).
  *
  * @param int $c
- *   Celsius value
+ *   Celsius value.
  *
  * @return int
- *   Celsius rounded value converted to fahrenheit
+ *   Celsius rounded value converted to fahrenheit.
  */
-function yahoo_weather_widget_search_celsius_to_fahrenheit($c) {
+function yahoo_weather_search_widget_celsius_to_fahrenheit($c) {
   return round(($c * (9 / 5)) + 32);
 }
 
@@ -409,12 +409,12 @@ function yahoo_weather_widget_search_celsius_to_fahrenheit($c) {
  * Convert Fahrenheit(F) to Celsius(C).
  *
  * @param int $f
- *   Fahrenheit value
+ *   Fahrenheit value.
  *
  * @return int
- *   Fahrenheit rounded value converted to celsius
+ *   Fahrenheit rounded value converted to celsius.
  */
-function yahoo_weather_widget_search_fahrenheit_to_celsius($f) {
+function yahoo_weather_search_widget_fahrenheit_to_celsius($f) {
   return round(($f - 32) * (5 / 9));
 }
 
@@ -425,12 +425,12 @@ function yahoo_weather_widget_search_fahrenheit_to_celsius($f) {
  * configuration by allow_url_fopen=0
  *
  * @param string $url
- *   The final URL to do the request
+ *   The final URL to do the request.
  *
  * @return string
- *   The json request
+ *   The json request.
  */
-function yahoo_weather_widget_search_get_contents_curl($url) {
+function yahoo_weather_search_widget_get_contents_curl($url) {
   $curl_handle = curl_init();
   curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded; charset=UTF-8'));
   curl_setopt($curl_handle, CURLOPT_URL, $url);
@@ -454,7 +454,7 @@ function yahoo_weather_widget_search_get_contents_curl($url) {
  * @return string
  *   Return the sanitized
  */
-function yahoo_weather_widget_search_sanitize_string($string) {
+function yahoo_weather_search_widget_sanitize_string($string) {
   $string = trim($string);
 
   $string = str_replace(
@@ -495,14 +495,11 @@ function yahoo_weather_widget_search_sanitize_string($string) {
  *
  * @return int
  *   Whatever if the insert / update was successful.
- *
- * @throws Exception
- * @throws InvalidMergeQueryException
  */
-function yahoo_weather_widget_search_set_user_place($woeid, $place) {
+function yahoo_weather_search_widget_set_user_place($woeid, $place) {
   global $user;
 
-  $query = db_merge('yahoo_weather_widget_search_woeid')
+  $query = db_merge('yahoo_weather_search_widget_woeid')
     ->key(array('uid' => $user->uid))
     ->fields(array(
       'woeid' => $woeid,
@@ -520,11 +517,11 @@ function yahoo_weather_widget_search_set_user_place($woeid, $place) {
  * @return int
  *   The who on earth id stored.
  */
-function yahoo_weather_widget_search_get_user_place() {
+function yahoo_weather_search_widget_get_user_place() {
   global $user;
 
   // Create an object of type SelectQuery.
-  $query = db_select('yahoo_weather_widget_search_woeid', 'y');
+  $query = db_select('yahoo_weather_search_widget_woeid', 'y');
 
   // Add extra detail to this query object: a condition, fields and a range.
   $query
@@ -549,8 +546,8 @@ function yahoo_weather_widget_search_get_user_place() {
  * @param int $uid
  *   The user id for delete info.
  */
-function yahoo_weather_widget_search_delete_user_place($uid) {
-  db_delete('yahoo_weather_widget_search_woeid')
+function yahoo_weather_search_widget_delete_user_place($uid) {
+  db_delete('yahoo_weather_search_widget_woeid')
     ->condition('uid', $uid)
     ->execute();
 }
@@ -562,17 +559,15 @@ function yahoo_weather_widget_search_delete_user_place($uid) {
  *   Who on earth ID.
  *
  * @return string
- *   The html to be displayed
- *
- * @throws Exception
+ *   The html to be displayed.
  */
-function yahoo_weather_widget_search_render($woeid) {
-  $weather = yahoo_weather_widget_search_get_weather('', $woeid);
-  $link_form = drupal_get_form('yahoo_weather_widget_search_link');
+function yahoo_weather_search_widget_render($woeid) {
+  $weather = yahoo_weather_search_widget_get_weather('', $woeid);
+  $link_form = drupal_get_form('yahoo_weather_search_widget_link');
 
   $link = drupal_render($link_form);
   // Return the html that's is going to show on the block.
-  $html = theme('yahoo_weather_widget_search_template',
+  $html = theme('yahoo_weather_search_widget_template',
     array(
       'link' => $link,
       'location' => $weather->channel->xpath('yweather:location'),
@@ -590,7 +585,7 @@ function yahoo_weather_widget_search_render($woeid) {
  * @return string
  *   Return the final html.
  */
-function yahoo_weather_widget_search_weather_icon($condid) {
+function yahoo_weather_search_widget_weather_icon($condid) {
 
   switch ($condid) {
     case '0': $icon = '<i class="wi wi-tornado"></i>';

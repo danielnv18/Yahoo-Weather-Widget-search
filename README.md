@@ -1,9 +1,32 @@
-Yahoo Weather Widget Search
+Yahoo Weather Search Widget
 ===========================
 
-This drupal module create a search block to search the weather of one place
 
-### Instructions ###
-1. Get an [Application ID](https://developer.yahoo.com/wsregapp/)
-1. Go to https://example.com/config/media/ywws to add the consumer key
-1. Place the block where you need it
+### SUMMARY ###
+
+The Administration menu module displays the entire administrative menu tree (and
+most local tasks) in a drop-down menu, providing administrators one- or
+two-click access to most pages.  Other modules may also add menu links to the
+menu using hook_admin_menu_output_alter().
+
+For a full description of the module, visit the project page:
+  http://drupal.org/project/admin_menu
+
+To submit bug reports and feature suggestions, or to track changes:
+  http://drupal.org/project/issues/admin_menu
+
+
+### REQUIREMENTS ###
+
+None.
+
+
+### INSTALLATION ###
+
+* Install as usual, see http://drupal.org/node/70151 for further information.
+* You likely want to disable Toolbar module, since its output clashes with
+  Administration menu.
+
+
+### CONFIGURATION ###
+

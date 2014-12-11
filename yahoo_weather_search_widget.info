@@ -1,4 +1,4 @@
-name = Yahoo Weather Widget Search
+name = Yahoo Weather Search Widget
 description = You can consult the weather from your site
 package = Media
 core = 7.x
