@@ -282,14 +282,14 @@ function yahoo_weather_search_widget_ajax_submit($form, &$form_state) {
 /**
  * Consult the weather of one place using Yahoo services.
  *
- * @see https://developer.yahoo.com/weather/
- * @see http://php.net/manual/en/class.simplexmlelement.php
- *
  * @param string $place
  *   The place name to request.
  *
  * @return SimpleXMLElement
  *   The Yahoo Weather services respond
+ *
+ * @see https://developer.yahoo.com/weather/
+ * @see http://php.net/manual/en/class.simplexmlelement.php
  */
 function yahoo_weather_search_widget_get_weather($place = '', $woeid = 0) {
 
@@ -316,13 +316,13 @@ function yahoo_weather_search_widget_get_weather($place = '', $woeid = 0) {
 /**
  * Get the WOEID of one place using Yahoo services.
  *
- * @see https://developer.yahoo.com/geo/geoplanet/
- *
  * @param string $place
  *   The place name to request.
  *
  * @return int
  *   The WOEID or null in case the request fail
+ *
+ * @see https://developer.yahoo.com/geo/geoplanet/
  */
 function yahoo_weather_search_widget_place_woeid($place) {
 
@@ -357,13 +357,13 @@ function yahoo_weather_search_widget_place_woeid($place) {
  *
  * Note that this request doesn't contain the weather info of one place.
  *
- * @see https://developer.yahoo.com/geo/geoplanet/guide/api_docs.html#api_overview
- *
  * @param string $place
  *   The place name to request.
  *
  * @return object
  *   json respond decoded as a object.
+ *
+ * @see https://developer.yahoo.com/geo/geoplanet/guide/api_docs.html#api_overview
  */
 function yahoo_weather_search_widget_place_info($place) {
 
