@@ -69,7 +69,7 @@ function yahoo_weather_search_widget_block_info() {
   $blocks = array();
 
   $blocks['yahoo_weather'] = array(
-    'info' => t('Yahoo Weather'),
+    'info' => t('Yahoo weather search'),
   );
 
   return $blocks;
