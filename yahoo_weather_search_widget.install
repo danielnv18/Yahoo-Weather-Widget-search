@@ -9,7 +9,7 @@
  * Implements hook_schema().
  */
 function yahoo_weather_search_widget_schema() {
-  $schema['yahoo_weather_widget_search_woeid'] = array(
+  $schema['yahoo_weather_search_widget_woeid'] = array(
     'description' => 'The base table for stored the places by user.',
     'fields' => array(
       'yid' => array(
