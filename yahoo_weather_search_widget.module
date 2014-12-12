@@ -240,15 +240,10 @@ function yahoo_weather_search_widget_link_response($type = 'ajax') {
  *
  * @see yahoo_weather_search_widget_block_form()
  *
- * @param array $form
- *   Drupal form array.
- * @param array $form_state
- *   Drupal form_state array.
- *
  * @return string
  *   The html that is going to replace.
  */
-function yahoo_weather_search_widget_ajax_submit(&$form, $form_state) {
+function yahoo_weather_search_widget_ajax_submit($form, &$form_state) {
 
   // First check if the user type something on the input.
   if (!empty($form_state['values']['place'])) {
