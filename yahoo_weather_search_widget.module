@@ -291,7 +291,7 @@ function yahoo_weather_search_widget_ajax_submit(&$form, $form_state) {
  * @see http://php.net/manual/en/class.simplexmlelement.php
  *
  * @param string $place
- *   The place name to request
+ *   The place name to request.
  *
  * @return SimpleXMLElement
  *   The Yahoo Weather services respond
@@ -324,7 +324,7 @@ function yahoo_weather_search_widget_get_weather($place = '', $woeid = 0) {
  * @see https://developer.yahoo.com/geo/geoplanet/
  *
  * @param string $place
- *   The place name to request
+ *   The place name to request.
  *
  * @return int
  *   The WOEID or null in case the request fail
@@ -449,7 +449,7 @@ function yahoo_weather_search_widget_get_contents_curl($url) {
  * This is needed in case the curl library doesn't support special charts
  *
  * @param string $string
- *   String of the text that needs to be sanitize
+ *   String of the text that needs to be sanitize.
  *
  * @return string
  *   Return the sanitized

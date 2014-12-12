@@ -1,6 +1,6 @@
 /**
  * @file
- * Scripts
+ * Scripts.
  */
 
 (function($){
